@@ -54,6 +54,19 @@ def clipCopy():
 	except (RuntimeError, OSError) as Error:
 		sys.stderr.write(f"{Error}\n")
 		return 2
+def normalizeWindowsArgs(argv):
+	Normalized = []
+	for Arg in argv:
+		if Arg == "/?":
+			Normalized.append("--help")
+		if Arg.startswith("/") and len(Arg) > 1:
+			if len(Arg) == 2:
+				Normalized.append("-" + Arg[1:2])
+			else:
+				Normalized.append("--" + Arg[1:])
+		else:
+			Normalized.append(Arg)
+	return Normalized
 def parseArgs():
 	Examples = """
 Examples:
@@ -61,11 +74,11 @@ dir | %(prog)s   Places a copy of the current directory listing into the Windows
 
 %(prog)s < readme.txt   Places a copy of the text from readme.txt on to the Windows clipboard.
 
-%(prog)s   Copy what you entered to the Windows clipboard.
-	"""
+%(prog)s   Copy what you entered to the Windows clipboard."""
+	ArgsList = normalizeWindowsArgs(sys.argv)
 	Parser = argparse.ArgumentParser(prog="Clipcopy", description="Copy your standard input to clipboard.", epilog=Examples, formatter_class=argparse.RawDescriptionHelpFormatter, allow_abbrev=False)
 	Parser.add_argument("-v", "--version", action="version", version="%(prog)s version 1.0")
-	Parser.parse_args()
+	Parser.parse_args(ArgsList)
 def main():
 	parseArgs()
 	sys.exit(clipCopy())
