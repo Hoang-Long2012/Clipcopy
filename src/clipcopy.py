@@ -75,7 +75,7 @@ dir | %(prog)s   Places a copy of the current directory listing into the Windows
 %(prog)s < readme.txt   Places a copy of the text from readme.txt on to the Windows clipboard.
 
 %(prog)s   Copy what you entered to the Windows clipboard."""
-	ArgsList = normalizeWindowsArgs(sys.argv)
+	ArgsList = normalizeWindowsArgs(sys.argv[1:])
 	Parser = argparse.ArgumentParser(prog="Clipcopy", description="Copy your standard input to clipboard.", epilog=Examples, formatter_class=argparse.RawDescriptionHelpFormatter, allow_abbrev=False)
 	Parser.add_argument("-v", "--version", action="version", version="%(prog)s version 1.0")
 	Parser.parse_args(ArgsList)
