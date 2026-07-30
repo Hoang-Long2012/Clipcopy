@@ -1,5 +1,9 @@
 # Changelog
 
+## Clipcopy version 1.2
+- Added text argument to copy text to the Windows clipboard.
+- Added -s; --show to show the copy content to the standard output.
+
 ## Clipcopy version 1.1
 - Internal changes.
 
