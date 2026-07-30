@@ -4,6 +4,7 @@ A simple Windows command-line utility that copies standard input to the Windows 
 
 ## Features
 
+- Copy text directly to the Windows clipboard.
 - Copy text from standard input directly to the Windows clipboard.
 - Supports Unicode text.
 - Reads until end-of-file (EOF).
@@ -33,29 +34,35 @@ pyinstaller --onefile clipcopy.py
 ## Usage
 
 ```
-Clipcopy [-h] [-v]
+clipcopy [-h] [-v] [-s] text
 ```
 
 The program reads all text from standard input and places it into the Windows clipboard.
 
 ## Examples
 
+Copy a string via text argument:
+
+```
+clipcopy "Hello"
+```
+
 Copy the output of a command:
 
 ```
-dir | Clipcopy
+dir | clipcopy
 ```
 
 Copy the contents of a file:
 
 ```
-Clipcopy < readme.txt
+clipcopy < readme.txt
 ```
 
 Type text manually and finish with EOF:
 
 ```
-Clipcopy
+clipcopy
 Hello, world!
 This text will be copied.
 ```
@@ -75,6 +82,8 @@ Press **Ctrl+Z**, then **Enter** to finish input.
 |--------|-------------|
 | `-h`, `--help` | Show the help message and exit. |
 | `-v`, `--version` | Show the program version and exit. |
+| `-s`, `--show` | Show copy content to the standard output. |
+| text | Text to copy to the clipboard. |
 
 ## Notes
 
