@@ -47,9 +47,12 @@ def setClipboard(Text):
 		Handle = None
 	finally:
 		User32.CloseClipboard()
-def clipCopy():
+def clipCopy(Text=None, Show=False):
+	Source = Text if isinstance(Text, str) else sys.stdin.read()
 	try:
-		setClipboard(sys.stdin.read())
+		setClipboard(Source)
+		if Show:
+			sys.stdout.write(Source)
 		return 0
 	except (RuntimeError, OSError) as Error:
 		sys.stderr.write(f"{Error}\n")
@@ -74,13 +77,17 @@ dir | %(prog)s   Places a copy of the current directory listing into the Windows
 
 %(prog)s < readme.txt   Places a copy of the text from readme.txt on to the Windows clipboard.
 
+%(prog)s "Hello"   Copy Hello string to clipboard.
+
 %(prog)s   Copy what you entered to the Windows clipboard."""
 	ArgsList = normalizeWindowsArgs(sys.argv[1:])
-	Parser = argparse.ArgumentParser(prog="Clipcopy", description="Copy your standard input to clipboard.", epilog=Examples, formatter_class=argparse.RawDescriptionHelpFormatter, allow_abbrev=False)
-	Parser.add_argument("-v", "--version", action="version", version="%(prog)s version 1.0")
-	Parser.parse_args(ArgsList)
+	Parser = argparse.ArgumentParser(prog="Clipcopy", description="Copy your standard input or text to clipboard.", epilog=Examples, formatter_class=argparse.RawDescriptionHelpFormatter, allow_abbrev=False)
+	Parser.add_argument("text", type=str, help="Text to copy to clipboard.")
+	Parser.add_argument("-v", "--version", action="version", version="%(prog)s version 1.1")
+	Parser.add_argument("-s", "--show", action="store_true", help="Show copy content to standard output.")
+	return Parser.parse_args(ArgsList)
 def main():
-	parseArgs()
-	sys.exit(clipCopy())
+	Args = parseArgs()
+	sys.exit(clipCopy(Args.text, Args.show))
 if __name__ == "__main__":
 	main()
