@@ -82,9 +82,9 @@ dir | %(prog)s   Places a copy of the current directory listing into the Windows
 %(prog)s   Copy what you entered to the Windows clipboard."""
 	ArgsList = normalizeWindowsArgs(sys.argv[1:])
 	Parser = argparse.ArgumentParser(prog="Clipcopy", description="Copy your standard input or text to clipboard.", epilog=Examples, formatter_class=argparse.RawDescriptionHelpFormatter, allow_abbrev=False)
-	Parser.add_argument("text", type=str, help="Text to copy to clipboard.")
+	Parser.add_argument("text", type=str, help="Text to copy to the clipboard.")
 	Parser.add_argument("-v", "--version", action="version", version="%(prog)s version 1.1")
-	Parser.add_argument("-s", "--show", action="store_true", help="Show copy content to standard output.")
+	Parser.add_argument("-s", "--show", action="store_true", help="Show copy content to the standard output.")
 	return Parser.parse_args(ArgsList)
 def main():
 	Args = parseArgs()
