@@ -2,6 +2,7 @@
 
 ## Clipcopy version 1.3
 - You can now use escape sequences with the text argument.
+- Fix bug reading from stdin.
 
 ## Clipcopy version 1.2
 - Added text argument to copy text to the Windows clipboard.
