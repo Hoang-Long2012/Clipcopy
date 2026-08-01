@@ -20,6 +20,16 @@ Kernel32.GlobalUnlock.argtypes = [ctypes.c_void_p]
 Kernel32.GlobalUnlock.restype = ctypes.c_bool
 Kernel32.GlobalFree.argtypes = [ctypes.c_void_p]
 Kernel32.GlobalFree.restype = ctypes.c_void_p
+def decode_escape(Value):
+	if Value is None:
+		return None
+	try:
+		Result = ast.literal_eval('"' + Value.replace('"', '\\"') + '"')
+		if not isinstance(Result, str):
+			raise ValueError
+		return Result
+	except (SyntaxError, ValueError, UnicodeError):
+		raise RuntimeError(f"Invalid escape sequence: {Value!r}")
 def setClipboard(Text):
 	if not User32.OpenClipboard(None):
 		raise RuntimeError(f"[WinError: {ctypes.get_last_error()}] Unable to open clipboard.")
@@ -48,7 +58,11 @@ def setClipboard(Text):
 	finally:
 		User32.CloseClipboard()
 def clipCopy(Text=None, Show=False):
-	Source = Text if isinstance(Text, str) else sys.stdin.read()
+	try:
+		Source = decode_escape(Text) if isinstance(Text, str) else sys.stdin.read()
+	except (ValueError, RuntimeError) as Error:
+		sys.stderr.write(f"{Error}\n")
+		return 1
 	try:
 		setClipboard(Source)
 		if Show:
@@ -83,7 +97,7 @@ dir | %(prog)s   Places a copy of the current directory listing into the Windows
 	ArgsList = normalizeWindowsArgs(sys.argv[1:])
 	Parser = argparse.ArgumentParser(prog="Clipcopy", description="Copy your standard input or text to clipboard.", epilog=Examples, formatter_class=argparse.RawDescriptionHelpFormatter, allow_abbrev=False)
 	Parser.add_argument("text", type=str, help="Text to copy to the clipboard.")
-	Parser.add_argument("-v", "--version", action="version", version="%(prog)s version 1.2")
+	Parser.add_argument("-v", "--version", action="version", version="%(prog)s version 1.3")
 	Parser.add_argument("-s", "--show", action="store_true", help="Show copy content to the standard output.")
 	return Parser.parse_args(ArgsList)
 def main():
