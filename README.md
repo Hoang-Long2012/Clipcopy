@@ -91,6 +91,29 @@ Press **Ctrl+Z**, then **Enter** to finish input.
 - Only Unicode text (`CF_UNICODETEXT`) is supported.
 - Binary data and other clipboard formats are not supported.
 - This utility is intended for Windows only.
+- You can use escape sequences with the text argument.
+
+## Escape sequences
+
+• Escape sequences are decoded using Python's unicode_escape codec.
+
+| Escape | Meaning |
+|---------|---------|
+| \n | New line |
+| \r | Carriage return |
+| \t | Horizontal tab |
+| \v | Vertical tab |
+| \b | Backspace |
+| \f | Form feed |
+| \a | Bell |
+| \\\ | Backslash |
+| \\' | Single quote |
+| \\" | Double quote |
+| \xNN | Hexadecimal byte |
+| \uNNNN | Unicode character |
+| \UNNNNNNNN | Unicode character |
+| \N{UNICODE NAME} | Unicode character |
+| \\{OCTAL} | Unicode character |
 
 ## License
 
